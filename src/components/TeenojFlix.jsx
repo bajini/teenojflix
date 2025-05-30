@@ -1,0 +1,92 @@
+import React, { useEffect, useState } from "react";
+import MovieList from "./MovieList";
+import SearchBar from "./SearchBar"; // 🔍 Autocomplete Search
+
+const TeenojFlix = () => {
+  const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1); // 🔄 New state
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/trending/movie/week?api_key=bb8b5e2ab9c10ba8a03ed864de2a5b6d&page=${page}`
+        );
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        setMovies(data.results || []);
+      } catch (err) {
+        setError("Could not load movies.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovies();
+  }, [page]);
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.title?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Now Streaming (Page {page})</h2>
+
+      {/* 🔍 Insert Autocomplete SearchBar here */}
+      <SearchBar />
+
+      {/* Local name filter (optional) */}
+      <input
+        type="text"
+        placeholder="Filter movies by name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{
+          padding: "10px",
+          marginBottom: "20px",
+          width: "300px",
+          fontSize: "16px",
+        }}
+      />
+
+      {loading && <p>Loading movies...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && (
+        <>
+          <MovieList
+            movies={filteredMovies.map((m) => ({
+              id: m.id,
+              title: m.title,
+              poster: m.poster_path
+                ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+                : null,
+            }))}
+          />
+          <div style={{ marginTop: "20px" }}>
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              style={{ marginRight: "10px", padding: "10px 20px" }}
+            >
+              ⬅ Previous
+            </button>
+            <button
+              onClick={() => setPage((prev) => prev + 1)}
+              style={{ padding: "10px 20px" }}
+            >
+              Next ➡
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default TeenojFlix;
