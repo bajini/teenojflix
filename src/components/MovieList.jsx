@@ -1,59 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import './MovieApp.css';
 
-const MovieList = ({ movies = [] }) => {
-  const [favorites, setFavorites] = useState([]);
+const MovieApp = () => {
+  const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(stored);
+    // Sample data
+    const sampleMovies = [
+      {
+        id: 1,
+        title: 'RRR',
+        poster: 'https://upload.wikimedia.org/wikipedia/en/d/d7/RRR_Poster.jpg',
+      },
+      {
+        id: 2,
+        title: 'Pushpa',
+        poster: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Pushpa_-_The_Rise_%282021_film%29.jpg',
+      },
+      {
+        id: 3,
+        title: 'Kantara',
+        poster: 'https://upload.wikimedia.org/wikipedia/en/9/90/Kantara_film_poster.jpg',
+      },
+    ];
+
+    try {
+      setMovies(sampleMovies);
+    } catch (error) {
+      console.error('Error loading movies:', error);
+      setError(true);
+    }
   }, []);
 
-  const toggleFavorite = (movieId) => {
-    const updated = favorites.includes(movieId)
-      ? favorites.filter((id) => id !== movieId)
-      : [...favorites, movieId];
-
-    setFavorites(updated);
-    localStorage.setItem("favorites", JSON.stringify(updated));
-  };
-
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-      {movies.map((movie) => (
-        <div key={movie.id} style={{ width: "150px", textAlign: "center", position: "relative" }}>
-          <Link to={`/movie/${movie.id}`} style={{ textDecoration: "none", color: "black" }}>
-            {movie.poster ? (
-              <img
-                src={movie.poster}
-                alt={movie.title}
-                style={{ width: "100%", borderRadius: "8px" }}
-                onError={(e) => (e.target.style.display = "none")}
-              />
-            ) : (
-              <p>No poster</p>
-            )}
-            <h4>{movie.title}</h4>
-          </Link>
-          <button
-            onClick={() => toggleFavorite(movie.id)}
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              background: "none",
-              border: "none",
-              fontSize: "20px",
-              cursor: "pointer",
-              color: favorites.includes(movie.id) ? "red" : "#ccc",
-            }}
-          >
-            ♥
-          </button>
+    <div className="movie-container">
+      <h1>🎬 TeenojFlix</h1>
+      {error ? (
+        <p>Could not load movies.</p>
+      ) : (
+        <div className="movie-grid">
+          {movies.map((movie) => (
+            <div key={movie.id} className="movie-card">
+              <img src={movie.poster} alt={movie.title} />
+              <h3>{movie.title}</h3>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };
 
-export default MovieList;
+export default MovieApp;

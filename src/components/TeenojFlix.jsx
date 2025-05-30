@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import MovieList from "./MovieList";
-import SearchBar from "./SearchBar"; // 🔍 Autocomplete Search
+import SearchBar from "./SearchBar";
 
 const TeenojFlix = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1); // 🔄 New state
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const res = await fetch(
-          `https://api.themoviedb.org/3/trending/movie/week?api_key=bb8b5e2ab9c10ba8a03ed864de2a5b6d&page=${page}`
-        );
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const data = await res.json();
+        const res = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=bb8b5e2ab9c10ba8a03ed864de2a5b6d=${page}`);
+        const data = res.data;
         setMovies(data.results || []);
       } catch (err) {
         setError("Could not load movies.");
@@ -37,10 +36,8 @@ const TeenojFlix = () => {
     <div style={{ padding: "20px" }}>
       <h2>Now Streaming (Page {page})</h2>
 
-      {/* 🔍 Insert Autocomplete SearchBar here */}
       <SearchBar />
 
-      {/* Local name filter (optional) */}
       <input
         type="text"
         placeholder="Filter movies by name..."
