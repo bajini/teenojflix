@@ -9,7 +9,14 @@
     "preview": "vite preview",
     "start": "vite"
   },
-  "keywords": ["react", "tmdb", "vite", "movies", "tailwind", "netflix-clone"],
+  "keywords": [
+    "react",
+    "tmdb",
+    "vite",
+    "movies",
+    "tailwind",
+    "netflix-clone"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
