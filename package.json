@@ -1,19 +1,18 @@
 {
   "name": "teenojflix",
   "version": "1.0.0",
+  "description": "A Netflix-style movie browser built with React and Vite using TMDB API.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["react", "tmdb", "vite", "movies", "tailwind", "netflix-clone"],
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.1",
@@ -26,6 +25,5 @@
     "postcss": "^8.5.4",
     "tailwindcss": "^3.4.17",
     "vite": "^6.3.5"
-  },
-  "description": ""
+  }
 }
